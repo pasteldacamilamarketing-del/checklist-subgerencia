@@ -36,13 +36,4 @@ konclui/
 - localStorage para persistência
 - Webhook Make para notificações por email
 
-## 🔮 Próximos passos
 
-- [ ] Banco de dados Supabase (persistência real)
-- [ ] Notificações WhatsApp automáticas
-- [ ] Multi-unidade / rede de franquias
-- [ ] App nativo iOS/Android
-
----
-
-**Powered by Koncluí** · Checklists e Gestão Operacional para Restaurantes
