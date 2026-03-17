@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Koncluí – Pastel da Camila</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#E8001C;--red-dark:#B5001A;--red-light:#FF3344;
+  --bg:#F0F0F3;--white:#fff;
+  --text:#1A1A1A;--text2:#555;--text3:#999;--border:#E0E0E0;
+  --green:#00B37E;--yellow:#F59E0B;--orange:#F97316;--blue:#2563EB;--purple:#7C3AED;
+  --r:14px;--rs:8px;--sh:0 2px 12px rgba(0,0,0,.07);--shl:0 8px 32px rgba(0,0,0,.13);
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:110px}
+h1,h2,h3,h4,h5{font-family:'Sora',sans-serif}
+input,select,textarea,button{font-family:inherit}
+button{cursor:pointer;border:none;outline:none}
+.hide{display:none!important}
+
+/* ── LOGIN ── */
+.login-bg{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(145deg,#0d0d0d,#1a0003,var(--red-dark))}
+.login-card{background:#fff;border-radius:22px;padding:36px 28px;width:100%;max-width:390px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.login-hero{text-align:center;margin-bottom:28px}
+.login-emoji{font-size:54px;display:block;margin-bottom:8px}
+.login-brand{font-family:'Sora',sans-serif;font-size:24px;font-weight:900}
+.login-tagline{font-size:12px;color:var(--text3);margin-top:4px}
+.login-powered{font-size:10px;color:#ccc;margin-top:8px;letter-spacing:.3px}
+.lf{margin-bottom:14px}
+.lf label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.7px}
+.lf input{width:100%;border:2px solid var(--border);border-radius:var(--rs);padding:13px 15px;font-size:15px;transition:border-color .2s;color:var(--text)}
+.lf input:focus{border-color:var(--red);outline:none}
+.login-btn{width:100%;padding:15px;background:var(--red);color:#fff;border-radius:var(--rs);font-family:'Sora',sans-serif;font-size:15px;font-weight:800;margin-top:4px;transition:opacity .2s}
+.login-btn:disabled{opacity:.5;cursor:not-allowed}
+.login-alert{background:#FEE2E2;color:#991B1B;border-radius:var(--rs);padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:16px;text-align:center}
+
+/* ── CHANGE PWD ── */
+.chpwd-bg{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(145deg,#0d0d0d,#1a0003,var(--red-dark))}
+.chpwd-card{background:#fff;border-radius:22px;padding:32px 24px;width:100%;max-width:390px;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.chpwd-badge{display:inline-block;background:#FEF3C7;color:#92400E;border-radius:99px;padding:4px 12px;font-size:11px;font-weight:700;margin-bottom:14px}
+
+/* ── HEADER ── */
+.hdr{background:var(--red);color:#fff;padding:12px 16px;position:sticky;top:0;z-index:200;box-shadow:0 4px 20px rgba(232,0,28,.35)}
+.hdr-in{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hdr-brand{font-size:9px;font-weight:700;letter-spacing:2px;opacity:.7;text-transform:uppercase}
+.hdr-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;line-height:1.1}
+.hdr-user{background:rgba(255,255,255,.2);border-radius:99px;padding:5px 11px;font-size:11px;font-weight:700}
+.hdr-out{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);color:#fff;border-radius:99px;padding:5px 11px;font-size:11px;font-weight:700}
+
+/* ── CARDS / FIELDS ── */
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:16px;margin:12px 12px 0}
+.card-t{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.f input,.f select,.f textarea{width:100%;border:2px solid var(--border);border-radius:var(--rs);padding:10px 12px;font-size:14px;transition:border-color .2s;color:var(--text)}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--red);outline:none}
+.f textarea{min-height:65px;resize:vertical}
+.ferr{border-color:var(--red)!important}
+.errmsg{color:var(--red);font-size:12px;margin-top:3px;font-weight:600}
+
+/* ── TURNO ── */
+.turno-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tbtn{padding:16px 8px;border-radius:var(--r);border:2.5px solid var(--border);background:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;text-align:center;transition:all .2s;color:var(--text2)}
+.tbtn.on{border-color:var(--red);background:var(--red);color:#fff}
+.tbtn-icon{font-size:28px;display:block;margin-bottom:5px}
+
+/* ── BANNER ── */
+.banner{background:#1A1A1A;color:#fff;padding:12px 16px;margin:12px 12px 0;border-radius:var(--r)}
+.banner-t{font-family:'Sora',sans-serif;font-size:12px;font-weight:700;color:#FFD700;margin-bottom:6px}
+.banner-i{font-size:12px;color:#ccc;padding-left:13px;position:relative;margin-bottom:2px;line-height:1.5}
+.banner-i::before{content:'▶';position:absolute;left:0;color:var(--red-light);font-size:9px;top:3px}
+
+/* ── PROGRESS ── */
+.prog{background:#fff;margin:12px 12px 0;border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px}
+.prog-bar-bg{background:#F0F0F0;border-radius:99px;height:9px;overflow:hidden;margin:7px 0 10px}
+.prog-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--red-dark),var(--red-light));transition:width .4s}
+.prog-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center}
+.psv{font-family:'Sora',sans-serif;font-size:17px;font-weight:800}
+.psl{font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase}
+
+/* ── RESP PANEL ── */
+.rpanel{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:12px 16px;margin:12px 12px 0}
+.rstatus{display:inline-block;border-radius:99px;padding:3px 11px;font-size:11px;font-weight:700}
+.sc{background:#D1FAE5;color:#065F46}.sa{background:#FEF3C7;color:#92400E}.sp{background:#FED7AA;color:#9A3412}.sk{background:#FEE2E2;color:#991B1B}
+
+/* ── SECTION ACCORDION ── */
+.acc{margin:12px 12px 0;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.acc-head{padding:13px 16px;background:#fff;display:flex;align-items:center;justify-content:space-between;cursor:pointer;border-bottom:1px solid var(--border)}
+.acc-head.aerr{background:#FFF5F5}
+.acc-hl{display:flex;align-items:center;gap:9px}
+.acc-name{font-family:'Sora',sans-serif;font-size:13px;font-weight:700}
+.acc-meta{font-size:10px;color:var(--text3);margin-top:1px}
+.acc-chev{font-size:17px;color:var(--text3);transition:transform .22s}
+.acc-chev.open{transform:rotate(180deg)}
+
+/* ── CHECKLIST ITEM ── */
+.cki{padding:14px 16px;border-bottom:1px solid var(--border);background:#fff}
+.cki:last-child{border-bottom:none}
+.cki.lc{border-left:4px solid var(--red)}
+.cki.li{border-left:4px solid var(--orange)}
+.cki.lr{border-left:4px solid var(--blue)}
+.lvl{display:inline-block;font-size:9px;font-weight:700;border-radius:4px;padding:2px 6px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.lvc{background:#FEE2E2;color:#991B1B}.lvi{background:#FED7AA;color:#9A3412}.lvr{background:#DBEAFE;color:#1E40AF}
+.cki-title{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;margin-bottom:2px}
+.cki-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.ans-row{display:flex;gap:6px}
+.abtn{flex:1;padding:9px 3px;border-radius:var(--rs);border:2px solid var(--border);background:#fff;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;transition:all .15s;color:var(--text2)}
+.abtn.as{border-color:var(--green);background:var(--green);color:#fff}
+.abtn.an{border-color:var(--red);background:var(--red);color:#fff}
+.abtn.ana{border-color:#9CA3AF;background:#9CA3AF;color:#fff}
+.neg{background:#FFF8F8;border:1.5px solid #FECACA;border-radius:var(--rs);padding:12px;margin-top:10px;display:flex;flex-direction:column;gap:9px}
+.neg-t{font-family:'Sora',sans-serif;font-size:10px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:.5px}
+
+/* ── TOGGLE ── */
+.togrow{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+.togrow:last-child{border-bottom:none}
+.toglbl{font-size:13px;font-weight:600}
+.togbtns{display:flex;gap:5px}
+.togbtn{padding:5px 12px;border-radius:99px;border:2px solid var(--border);background:#fff;font-size:11px;font-weight:700;font-family:'Sora',sans-serif;transition:all .15s}
+.togbtn.ts{border-color:var(--red);background:var(--red);color:#fff}
+.togbtn.tn{border-color:var(--green);background:var(--green);color:#fff}
+
+/* ── DECL ── */
+.decl{background:#F0FDF4;border:2px solid #86EFAC;border-radius:var(--rs);padding:13px;display:flex;gap:11px;align-items:flex-start;cursor:pointer}
+.decl.on{background:#D1FAE5;border-color:var(--green)}
+.decl-chk{width:21px;height:21px;border-radius:5px;border:2.5px solid #16A34A;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;margin-top:1px}
+.decl-chk.on{background:#16A34A}
+.decl-txt{font-size:13px;font-weight:600;color:#166534;line-height:1.5}
+
+/* ── VAL PANEL ── */
+.valpanel{background:#FFF1F2;border:2px solid var(--red);border-radius:var(--r);padding:14px 16px;margin:12px 12px 0}
+.valtitle{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:var(--red);margin-bottom:9px}
+.valitem{font-size:12px;color:#991B1B;padding:5px 0;border-bottom:1px solid #FECACA;display:flex;gap:7px;align-items:flex-start}
+.valitem:last-child{border-bottom:none}
+.valitem::before{content:'✕';font-weight:800;flex-shrink:0}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:0;left:0;right:0;z-index:300;background:#fff;border-top:1.5px solid var(--border);padding:9px 12px;display:flex;gap:7px;box-shadow:0 -4px 20px rgba(0,0,0,.1)}
+.fabbtn{flex:1;padding:12px 4px;border-radius:var(--rs);font-family:'Sora',sans-serif;font-size:12px;font-weight:700;text-align:center}
+.fab-p{background:var(--red);color:#fff}
+.fab-s{background:#F0F0F0;color:var(--text)}
+.fab-d{background:#fff;color:var(--red);border:2px solid var(--red)}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:68px;left:50%;transform:translateX(-50%);background:#1A1A1A;color:#fff;padding:9px 20px;border-radius:99px;font-size:12px;font-weight:600;z-index:9999;box-shadow:var(--shl);opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+
+/* ── SENDING OVERLAY ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px}
+.overlay-card{background:#fff;border-radius:20px;padding:28px 24px;width:100%;max-width:340px;text-align:center}
+.spin{width:48px;height:48px;border:4px solid #F0F0F0;border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ol-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px}
+.ol-sub{font-size:13px;color:var(--text2);line-height:1.5}
+.ol-steps{display:flex;flex-direction:column;gap:6px;margin-top:14px;text-align:left}
+.ol-step{display:flex;align-items:center;gap:10px;font-size:12px;padding:6px 10px;border-radius:var(--rs);font-weight:600}
+.step-ok{background:#D1FAE5;color:#065F46}
+.step-go{background:#FEF3C7;color:#92400E}
+.step-wait{background:#F3F4F6;color:var(--text3)}
+
+/* ── SUMMARY SCREEN – DESKTOP PRINT-READY ── */
+.sum-wrap{position:fixed;inset:0;background:#1a1a1a;z-index:500;display:flex;flex-direction:column;overflow:hidden}
+.sum-toolbar{background:#111;border-bottom:1px solid #333;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;z-index:10}
+.sum-toolbar-title{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+.sum-toolbar-hint{background:#2a2a2a;border:1px solid #3a3a3a;border-radius:var(--rs);padding:8px 14px;display:flex;align-items:center;gap:10px;flex:1;max-width:520px}
+.sum-toolbar-hint-icon{font-size:20px;flex-shrink:0}
+.sum-toolbar-hint-text{font-size:11px;color:#ccc;line-height:1.5}
+.sum-toolbar-hint-text b{color:#FFD700}
+.sum-toolbar-hint-kbd{display:inline-block;background:#333;border:1px solid #555;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;color:#fff;margin:0 2px;font-family:monospace}
+.sum-toolbar-actions{display:flex;gap:8px;flex-shrink:0}
+.tbtn-copy{background:#25D366;color:#fff;border-radius:var(--rs);padding:8px 16px;font-family:'Sora',sans-serif;font-size:12px;font-weight:700}
+.tbtn-back{background:transparent;border:1.5px solid #555;color:#aaa;border-radius:var(--rs);padding:8px 14px;font-family:'Sora',sans-serif;font-size:12px;font-weight:700}
+
+/* THE SCREENSHOT ZONE — visible white card on dark bg */
+.sum-viewport{flex:1;overflow-y:auto;padding:20px;display:flex;justify-content:center}
+.sum-capture{background:#fff;width:100%;max-width:820px;border-radius:12px;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 20px 60px rgba(0,0,0,.6)}
+
+/* INNER LAYOUT — 2 column on desktop */
+.sum-hdr{background:linear-gradient(135deg,var(--red-dark),var(--red));color:#fff;padding:20px 24px 18px;border-radius:12px 12px 0 0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.sum-hdr-left{flex:1}
+.sum-brand{font-size:10px;opacity:.7;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.sum-name{font-family:'Sora',sans-serif;font-size:22px;font-weight:900;margin-bottom:2px}
+.sum-meta{font-size:12px;opacity:.75}
+.sum-status-badge{display:inline-block;background:rgba(255,255,255,.2);border-radius:99px;padding:5px 16px;font-size:13px;font-weight:700;margin-top:10px}
+.score-ring{width:90px;height:90px;border-radius:50%;border:4px solid rgba(255,255,255,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.score-n{font-family:'Sora',sans-serif;font-size:30px;font-weight:900;line-height:1}
+.score-l{font-size:9px;opacity:.8;font-weight:700;letter-spacing:.5px;margin-top:1px}
+
+/* KPI ROW */
+.sum-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-bottom:1px solid var(--border)}
+.kpi-box{padding:14px 10px;text-align:center;border-right:1px solid var(--border)}
+.kpi-box:last-child{border-right:none}
+.kpi-n{font-family:'Sora',sans-serif;font-size:24px;font-weight:900}
+.kpi-l{font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;margin-top:2px}
+
+/* BODY — 2 cols */
+.sum-body{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.sum-col{padding:16px 20px;border-right:1px solid var(--border)}
+.sum-col:last-child{border-right:none}
+.sum-col-title{font-family:'Sora',sans-serif;font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border)}
+.occ-item{background:#FFF8F8;border-radius:6px;padding:10px;margin-bottom:8px;border-left:3px solid var(--red)}
+.occ-item:last-child{margin-bottom:0}
+.occ-item.occ-ok{background:#F0FDF4;border-left-color:var(--green)}
+.occ-t{font-family:'Sora',sans-serif;font-size:12px;font-weight:700;margin-bottom:3px}
+.occ-d{font-size:11px;color:var(--text2);margin-bottom:2px;line-height:1.4}
+
+/* FOOTER */
+.sum-footer{background:#1A1A1A;color:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;border-radius:0 0 12px 12px;flex-wrap:wrap;gap:8px}
+.sum-footer-decl{font-size:11px;opacity:.7;font-style:italic;flex:1}
+.sum-footer-sig{font-size:11px;opacity:.55}
+
+/* COPY TOAST */
+.copy-flash{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#25D366;color:#fff;padding:14px 28px;border-radius:12px;font-family:'Sora',sans-serif;font-size:15px;font-weight:800;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.copy-flash.on{opacity:1}
+
+@media(max-width:640px){
+  .sum-body{grid-template-columns:1fr}
+  .sum-col{border-right:none;border-bottom:1px solid var(--border)}
+  .sum-col:last-child{border-bottom:none}
+  .sum-hdr{flex-direction:column;text-align:center}
+  .sum-toolbar-hint{display:none}
+}
+
+/* ── CEO DASHBOARD ── */
+.ceo-hdr{background:linear-gradient(135deg,#1A1A1A,#2a0008,var(--red-dark));color:#fff;padding:18px 16px 14px}
+.ceo-title{font-family:'Sora',sans-serif;font-size:19px;font-weight:900;line-height:1.1}
+.ceo-sub{font-size:11px;opacity:.65;margin-top:2px}
+.ceo-badge{display:inline-block;background:rgba(255,255,255,.14);border-radius:99px;padding:4px 11px;font-size:10px;font-weight:700;margin-top:7px}
+.cnav{display:flex;gap:5px;padding:12px 12px 0;overflow-x:auto}
+.cnav::-webkit-scrollbar{display:none}
+.cnav-btn{padding:7px 14px;border-radius:99px;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;white-space:nowrap;border:2px solid var(--border);background:#fff;color:var(--text2);flex-shrink:0}
+.cnav-btn.on{background:var(--red);border-color:var(--red);color:#fff}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}
+.kpic{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:14px;position:relative;overflow:hidden}
+.kpic::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kr::before{background:var(--red)}.kg::before{background:var(--green)}.ko::before{background:var(--orange)}.kb::before{background:var(--blue)}.kp::before{background:var(--purple)}
+.kpil{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.kpiv{font-family:'Sora',sans-serif;font-size:26px;font-weight:900;line-height:1}
+.kpis{font-size:11px;color:var(--text2);margin-top:3px}
+.kpii{position:absolute;right:12px;top:12px;font-size:20px;opacity:.25}
+.trend{display:inline-flex;align-items:center;gap:2px;font-size:10px;font-weight:700;margin-top:4px;border-radius:99px;padding:2px 7px}
+.tu{background:#D1FAE5;color:#065F46}.td{background:#FEE2E2;color:#991B1B}.tf{background:#F3F4F6;color:var(--text2)}
+.chart-card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:16px;margin:0 12px 12px}
+.chart-t{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;justify-content:space-between}
+.barchart{display:flex;align-items:flex-end;gap:5px;height:110px;padding-top:8px}
+.bw{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%}
+.bl{font-size:8px;font-weight:700;color:var(--text3);text-align:center}
+.bvl{font-size:9px;font-weight:700;color:var(--text2)}
+.bar{border-radius:3px 3px 0 0;min-height:3px;width:100%}
+.rank-item{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--border)}
+.rank-item:last-child{border-bottom:none}
+.rnum{font-family:'Sora',sans-serif;font-size:16px;font-weight:900;width:26px;text-align:center}
+.ravatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0}
+.rname{font-family:'Sora',sans-serif;font-size:13px;font-weight:700}
+.rsub{font-size:10px;color:var(--text2);margin-top:1px}
+.rscore{font-family:'Sora',sans-serif;font-size:19px;font-weight:900}
+.alert-item{display:flex;align-items:flex-start;gap:9px;padding:11px 0;border-bottom:1px solid var(--border)}
+.alert-item:last-child{border-bottom:none}
+.adot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.adr{background:var(--red)}.ado{background:var(--orange)}.adb{background:var(--blue)}
+.at{font-family:'Sora',sans-serif;font-size:12px;font-weight:700}
+.as2{font-size:11px;color:var(--text2);margin-top:2px}
+.abadge{border-radius:99px;padding:3px 9px;font-size:9px;font-weight:700;white-space:nowrap;flex-shrink:0}
+.shift-t{width:100%;border-collapse:collapse;font-size:12px}
+.shift-t th{font-family:'Sora',sans-serif;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;padding:5px 7px;text-align:left;border-bottom:2px solid var(--border)}
+.shift-t td{padding:9px 7px;border-bottom:1px solid var(--border)}
+.shift-t tr:last-child td{border-bottom:none}
+.spill{display:inline-block;border-radius:99px;padding:2px 9px;font-size:9px;font-weight:700}
+.hm-grid{display:grid;grid-template-columns:auto repeat(7,1fr);gap:3px;min-width:280px}
+.hmc{aspect-ratio:1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff}
+
+/* PRINT */
+@media print{
+  .fab,.hdr,.cnav,.ceo-hdr,.sum-toolbar{display:none!important}
+  .sum-wrap{position:static;background:#fff}
+  .sum-viewport{padding:0;overflow:visible}
+  .sum-capture{box-shadow:none;border-radius:0;max-width:100%}
+  body{padding-bottom:0}
+}
+@media(min-width:480px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useMemo,useRef,useCallback}=React;
+
+/* ═══════════════════════════
+   CONSTANTS
+═══════════════════════════ */
+const WEBHOOK='https://hook.us2.make.com/pz24jw68dgh7c3realu1locfwlq1ny67';
+const USERS_KEY='konclui_users';
+const SESSION_KEY='konclui_session';
+const CK_KEY='konclui_checklists';
+
+const DEFAULT_USERS={
+  gabriela:{name:'Gabriela',login:'gabriela',role:'subgerente',pwd:'123456',first:true,color:'#E8001C'},
+  vitoria:{name:'Vitória',login:'vitoria',role:'subgerente',pwd:'123456',first:true,color:'#7C3AED'},
+  bruna:{name:'Bruna',login:'bruna',role:'suporte',pwd:'123456',first:true,color:'#2563EB'},
+  camila:{name:'Camila',login:'camila',role:'ceo',pwd:'123456',first:true,color:'#1A1A1A'},
+};
+
+function getUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY))||{...DEFAULT_USERS};}catch{return{...DEFAULT_USERS};}}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u));}
+function getSession(){try{return JSON.parse(sessionStorage.getItem(SESSION_KEY));}catch{return null;}}
+function saveSession(s){sessionStorage.setItem(SESSION_KEY,JSON.stringify(s));}
+function clearSession(){sessionStorage.removeItem(SESSION_KEY);}
+function nowTime(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function todayFmt(){return new Date().toLocaleDateString('pt-BR');}
+function todayISO(){return new Date().toISOString().slice(0,10);}
+
+/* ═══════════════════════════
+   CHECKLIST DATA
+═══════════════════════════ */
+const ITEMS=[
+  // MANHÃ
+  {id:'m1',t:'manha',s:'Abastecimento',e:'📦',n:'critico',ti:'Verifiquei o estoque atual',d:'Conferir todos: recheios, massa, embalagens, insumos.'},
+  {id:'m2',t:'manha',s:'Abastecimento',e:'📦',n:'critico',ti:'Antecipei falta para este e o próximo turno',d:'Débora→compras | Cíntia→recheio | Dorival→logística'},
+  {id:'m3',t:'manha',s:'Massa',e:'📊',n:'critico',ti:'Conferi quantidade atual de massa',d:'Garantir massa suficiente para o dia.'},
+  {id:'m4',t:'manha',s:'Massa',e:'📊',n:'critico',ti:'Garanti produção mínima do dia',d:'Terça: 60 massas | Quarta: 70 + 90 rolos'},
+  {id:'m5',t:'manha',s:'Massa',e:'📊',n:'importante',ti:'Garanti produção do dia seguinte',d:'Antecipar para não comprometer o próximo turno.'},
+  {id:'m6',t:'manha',s:'Delivery',e:'🛵',n:'critico',ti:'Estou acompanhando pedidos em tempo real',d:'Monitorar pedidos ativos e tempo de entrega.'},
+  {id:'m7',t:'manha',s:'Delivery',e:'🛵',n:'critico',ti:'Intervim antes de qualquer pedido atrasar',d:'Pedido parado→ajustar operação. Sistêmico→Bruna.'},
+  {id:'m8',t:'manha',s:'Equipe',e:'👥',n:'importante',ti:'Defini função de todos no turno',d:'Cada colaborador sabe exatamente o que fazer.'},
+  {id:'m9',t:'manha',s:'Equipe',e:'👥',n:'importante',ti:'Corrigi quem travou',d:'Nenhum colaborador parado sem direcionamento.'},
+  {id:'m10',t:'manha',s:'Equipe',e:'👥',n:'critico',ti:'Não deixei novato sozinho',d:'Todo novato deve ter suporte ou supervisão direta.'},
+  {id:'m11',t:'manha',s:'Processos',e:'🎯',n:'importante',ti:'Verifiquei execução real dos processos',d:'Não basta orientar — verificar se está sendo feito.'},
+  {id:'m12',t:'manha',s:'Processos',e:'🎯',n:'importante',ti:'Corrigi desvios de padrão',d:'Qualquer desvio corrigido na hora e registrado.'},
+  {id:'m13',t:'manha',s:'Checklist',e:'📋',n:'critico',ti:'Todos responderam o checklist',d:'Checklist falso ou incompleto = corrigir na hora.'},
+  {id:'m14',t:'manha',s:'Checklist',e:'📋',n:'critico',ti:'Validei as respostas do checklist',d:'Confirmar que a resposta bate com a realidade.'},
+  {id:'m15',t:'manha',s:'Cliente',e:'👤',n:'critico',ti:'Resolvi problema de cliente na hora',d:'Nenhum problema sem resolução. Se necessário→Bruna.'},
+  {id:'m16',t:'manha',s:'Cliente',e:'👤',n:'importante',ti:'Evitei repetição do problema',d:'Identificar causa raiz e corrigir.'},
+  {id:'m17',t:'manha',s:'Ocorrências',e:'📘',n:'importante',ti:'Registrei tudo relevante',d:'Ocorrências, desvios, incidentes — tudo registrado.'},
+  {id:'m18',t:'manha',s:'Ocorrências',e:'📘',n:'importante',ti:'Informei no grupo',d:'Comunicação feita no grupo da equipe.'},
+  {id:'m19',t:'manha',s:'Estrutura',e:'🔧',n:'importante',ti:'Identifiquei problema estrutural',d:'Equipamentos, instalações, limpeza — verificado.'},
+  {id:'m20',t:'manha',s:'Estrutura',e:'🔧',n:'importante',ti:'Acionei responsável',d:'Dorival→execução | Bruna→direcionamento'},
+  {id:'m21',t:'manha',s:'Caixa',e:'💰',n:'critico',ti:'Garanti R$300 de troco disponível',d:'Verificar antes de abrir. Problema→Bruna.'},
+  {id:'m22',t:'manha',s:'Caixa',e:'💰',n:'critico',ti:'Registrei todas as movimentações',d:'Sangrias, entradas e saídas registradas.'},
+  {id:'m23',t:'manha',s:'Escala',e:'📅',n:'critico',ti:'Conferi equipe do turno',d:'Todos presentes e nos postos corretos.'},
+  {id:'m24',t:'manha',s:'Escala',e:'📅',n:'importante',ti:'Antecipei falta (principalmente domingo)',d:'Ajuste: Viviane (RH)→comunicar Bruna e Camila.'},
+  {id:'m25',t:'manha',s:'Decisões',e:'⚠️',n:'critico',ti:'Não decidi sozinho em assuntos relevantes',d:'Tudo relevante→grupo. Camila/Bruna validam.'},
+  {id:'m26',t:'manha',s:'Fechamento',e:'🔁',n:'critico',ti:'Loja organizada no final do turno',d:'Tudo no lugar para o próximo turno começar bem.'},
+  {id:'m27',t:'manha',s:'Fechamento',e:'🔁',n:'critico',ti:'Próximo turno informado sobre pendências',d:'Passagem de turno feita com clareza.'},
+  // TARDE/NOITE
+  {id:'t1',t:'tarde',s:'Abastecimento',e:'📦',n:'critico',ti:'Verifiquei estoque do turno anterior',d:'Débora→compras | Cíntia→recheio | Dorival→logística'},
+  {id:'t2',t:'tarde',s:'Abastecimento',e:'📦',n:'critico',ti:'Antecipei falta para o próximo dia',d:'Garantir que a abertura de amanhã não terá falta.'},
+  {id:'t3',t:'tarde',s:'Massa',e:'📊',n:'critico',ti:'Conferi saldo de massa do turno da manhã',d:'Saber o que sobrou e o que falta produzir.'},
+  {id:'t4',t:'tarde',s:'Massa',e:'📊',n:'critico',ti:'Garanti produção necessária para amanhã',d:'Terça: 60 massas | Quarta: 70 + 90 rolos'},
+  {id:'t5',t:'tarde',s:'Delivery',e:'🛵',n:'critico',ti:'Acompanhei pedidos no pico noturno',d:'Pico da tarde/noite exige atenção máxima.'},
+  {id:'t6',t:'tarde',s:'Delivery',e:'🛵',n:'critico',ti:'Intervim antes de atrasar qualquer pedido',d:'Se sistêmico→Bruna.'},
+  {id:'t7',t:'tarde',s:'Equipe',e:'👥',n:'importante',ti:'Defini função de todos no turno tarde/noite',d:'Cada colaborador com função clara.'},
+  {id:'t8',t:'tarde',s:'Equipe',e:'👥',n:'importante',ti:'Recebi passagem do turno da manhã',d:'Informações sobre o que ficou pendente.'},
+  {id:'t9',t:'tarde',s:'Equipe',e:'👥',n:'critico',ti:'Não deixei novato sem supervisão noturna',d:'Turno noturno exige atenção redobrada.'},
+  {id:'t10',t:'tarde',s:'Processos',e:'🎯',n:'importante',ti:'Verifiquei execução dos processos noturnos',d:'Produção, limpeza, organização — verificado.'},
+  {id:'t11',t:'tarde',s:'Processos',e:'🎯',n:'importante',ti:'Corrigi desvios encontrados',d:'Qualquer desvio corrigido imediatamente.'},
+  {id:'t12',t:'tarde',s:'Checklist',e:'📋',n:'critico',ti:'Todos responderam o checklist do turno',d:'Checklist falso = corrigir na hora.'},
+  {id:'t13',t:'tarde',s:'Checklist',e:'📋',n:'critico',ti:'Validei as respostas do checklist',d:'Confirmar se as respostas batem com a realidade.'},
+  {id:'t14',t:'tarde',s:'Cliente',e:'👤',n:'critico',ti:'Resolvi problemas de cliente no turno',d:'Nenhum problema sem resolução. Se necessário→Bruna.'},
+  {id:'t15',t:'tarde',s:'Ocorrências',e:'📘',n:'importante',ti:'Registrei ocorrências relevantes',d:'Tudo anotado e comunicado no grupo.'},
+  {id:'t16',t:'tarde',s:'Estrutura',e:'🔧',n:'importante',ti:'Verifiquei equipamentos antes de fechar',d:'Tudo funcionando para o dia seguinte.'},
+  {id:'t17',t:'tarde',s:'Caixa',e:'💰',n:'critico',ti:'Fechei o caixa corretamente',d:'Conferência final antes do fechamento.'},
+  {id:'t18',t:'tarde',s:'Caixa',e:'💰',n:'critico',ti:'Registrei todas as movimentações do turno',d:'Sangrias, entradas e saídas registradas.'},
+  {id:'t19',t:'tarde',s:'Escala',e:'📅',n:'critico',ti:'Conferi equipe e antecipei domingo',d:'Falta?→Viviane (RH)→comunicar Bruna e Camila.'},
+  {id:'t20',t:'tarde',s:'Decisões',e:'⚠️',n:'critico',ti:'Não decidi sozinho em assuntos relevantes',d:'Camila/Bruna validam.'},
+  {id:'t21',t:'tarde',s:'Fechamento',e:'🔁',n:'critico',ti:'Loja 100% organizada para o próximo dia',d:'Tudo no lugar, limpo e pronto para abertura.'},
+  {id:'t22',t:'tarde',s:'Segurança',e:'🔴',n:'critico',ti:'Gás desligado',d:'Verificar TODOS os pontos de gás antes de fechar.'},
+  {id:'t23',t:'tarde',s:'Segurança',e:'🔴',n:'critico',ti:'Equipamentos desligados',d:'Fritas, fritadeiras, elétricos — tudo desligado.'},
+  {id:'t24',t:'tarde',s:'Segurança',e:'🔴',n:'critico',ti:'Loja travada com segurança',d:'Portas, janelas, alarme — verificado e travado.'},
+];
+
+const SEC_MANHA=[...new Set(ITEMS.filter(i=>i.t==='manha').map(i=>i.s))];
+const SEC_TARDE=[...new Set(ITEMS.filter(i=>i.t==='tarde').map(i=>i.s))];
+
+/* ═══════════════════════════
+   DEMO DATA (CEO)
+═══════════════════════════ */
+const DAYS=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+function genDemo(){
+  return DAYS.flatMap((day,di)=>['manha','tarde'].map(t=>{
+    const sc=Math.floor(68+Math.random()*32),fl=Math.floor(Math.random()*4),cr=Math.floor(Math.random()*2);
+    return{day,dayIdx:di,turno:t,name:t==='manha'?'Gabriela':'Vitória',score:sc,total:t==='manha'?27:24,falhas:fl,criticos:cr,pendencias:Math.floor(Math.random()*2),status:cr>0?'critico':fl>0?'ressalvas':'conforme',dataFmt:day,isDemo:true};
+  }));
+}
+const DEMO=genDemo();
+
+/* ═══════════════════════════
+   WEBHOOK
+═══════════════════════════ */
+async function sendWebhook(textPayload){
+  try{
+    const r=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({texto:textPayload,timestamp:new Date().toISOString(),sistema:'Koncluí – Pastel da Camila'})});
+    return r.ok;
+  }catch{return false;}
+}
+
+/* ═══════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════ */
+function Toast({msg,show}){return <div className={`toast${show?' on':''}`}>{msg}</div>;}
+function useToast(){
+  const [t,sT]=useState({show:false,msg:''});const r=useRef();
+  function show(msg){sT({show:true,msg});clearTimeout(r.current);r.current=setTimeout(()=>sT({show:false,msg:''}),2500);}
+  return[t,show];
+}
+
+/* ═══════════════════════════
+   LOGIN
+═══════════════════════════ */
+function Login({onLogin}){
+  const [login,setLogin]=useState('');const [pwd,setPwd]=useState('');
+  const [err,setErr]=useState('');const [loading,setLoading]=useState(false);
+  function go(){
+    setErr('');if(!login.trim()||!pwd.trim()){setErr('Preencha todos os campos.');return;}
+    setLoading(true);
+    setTimeout(()=>{
+      const users=getUsers(),key=login.trim().toLowerCase(),user=users[key];
+      if(!user||user.pwd!==pwd){setErr('Login ou senha incorretos.');setLoading(false);return;}
+      onLogin(user,key);setLoading(false);
+    },500);
+  }
+  return(
+    <div className="login-bg">
+      <div className="login-card">
+        <div className="login-hero">
+          <span className="login-emoji">🥟</span>
+          <div className="login-brand">Pastel da Camila</div>
+          <div className="login-tagline">Sistema Operacional de Franquias</div>
+          <div className="login-powered">Powered by Koncluí · Checklists Inteligentes</div>
+        </div>
+        {err&&<div className="login-alert">⚠️ {err}</div>}
+        <div className="lf"><label>Login</label><input value={login} onChange={e=>setLogin(e.target.value)} placeholder="Seu login" onKeyDown={e=>e.key==='Enter'&&go()}/></div>
+        <div className="lf"><label>Senha</label><input type="password" value={pwd} onChange={e=>setPwd(e.target.value)} placeholder="••••••" onKeyDown={e=>e.key==='Enter'&&go()}/></div>
+        <button className="login-btn" onClick={go} disabled={loading}>{loading?'Verificando...':'ENTRAR →'}</button>
+        <div style={{marginTop:16,textAlign:'center',fontSize:11,color:'var(--text3)'}}>Acesso restrito · v3.0 · Koncluí 2025</div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════
+   CHANGE PASSWORD
+═══════════════════════════ */
+function ChangePwd({userKey,userName,onDone}){
+  const [pwd,setPwd]=useState('');const [conf,setConf]=useState('');const [err,setErr]=useState('');
+  function go(){
+    setErr('');
+    if(pwd.length<6){setErr('Mínimo 6 caracteres.');return;}
+    if(pwd!==conf){setErr('As senhas não conferem.');return;}
+    const users=getUsers();users[userKey]={...users[userKey],pwd,first:false};saveUsers(users);onDone(users[userKey]);
+  }
+  return(
+    <div className="chpwd-bg">
+      <div className="chpwd-card">
+        <div style={{fontSize:40,marginBottom:10}}>🔐</div>
+        <div className="chpwd-badge">🔔 Primeiro acesso detectado</div>
+        <div style={{fontFamily:"'Sora',sans-serif",fontSize:17,fontWeight:800,marginBottom:4}}>Olá, {userName}!</div>
+        <div style={{fontSize:13,color:'var(--text2)',marginBottom:20,lineHeight:1.5}}>Por segurança, defina uma senha pessoal antes de continuar. A senha padrão não pode ser mantida.</div>
+        {err&&<div className="login-alert">{err}</div>}
+        <div className="lf"><label>Nova senha (mín. 6 caracteres)</label><input type="password" value={pwd} onChange={e=>setPwd(e.target.value)} placeholder="Nova senha"/></div>
+        <div className="lf"><label>Confirmar</label><input type="password" value={conf} onChange={e=>setConf(e.target.value)} placeholder="Repita a senha" onKeyDown={e=>e.key==='Enter'&&go()}/></div>
+        <button className="login-btn" onClick={go}>DEFINIR SENHA E CONTINUAR →</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════
+   CHECKLIST ITEM COMPONENTS
+═══════════════════════════ */
+function NegFields({data,onChange}){
+  const d=data||{},set=(k,v)=>onChange({...d,[k]:v});
+  return(
+    <div className="neg">
+      <div className="neg-t">🔴 PREENCHIMENTO OBRIGATÓRIO — RESPOSTA NÃO</div>
+      <div className="f" style={{marginBottom:0}}><label>Justificativa *</label><textarea value={d.just||''} onChange={e=>set('just',e.target.value)} placeholder="O que aconteceu? Situação real." style={{minHeight:52}}/></div>
+      <div className="f" style={{marginBottom:0}}><label>Ação tomada *</label><textarea value={d.acao||''} onChange={e=>set('acao',e.target.value)} placeholder="O que você fez para resolver?" style={{minHeight:52}}/></div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+        <div className="f" style={{marginBottom:0}}><label>Impacto *</label><select value={d.impacto||''} onChange={e=>set('impacto',e.target.value)}><option value="">Selecione</option><option>baixo</option><option>medio</option><option>alto</option></select></div>
+        <div className="f" style={{marginBottom:0}}><label>Escalar?</label><select value={d.escalar||''} onChange={e=>set('escalar',e.target.value)}><option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      </div>
+      <div className="f" style={{marginBottom:0}}><label>Responsável *</label><input value={d.resp||''} onChange={e=>set('resp',e.target.value)} placeholder="Nome ou cargo"/></div>
+      <div className="f" style={{marginBottom:0}}><label>Prazo *</label><input value={d.prazo||''} onChange={e=>set('prazo',e.target.value)} placeholder="Ex: Hoje 18h"/></div>
+      <div className="f" style={{marginBottom:0}}><label>Vai para o próximo turno?</label><select value={d.prox||''} onChange={e=>set('prox',e.target.value)}><option value="">Selecione</option><option value="sim">Sim</option><option value="nao">Não</option></select></div>
+      {d.prox==='sim'&&<div className="f" style={{marginBottom:0}}><label>Detalhe da pendência *</label><textarea value={d.det||''} onChange={e=>set('det',e.target.value)} placeholder="O que o próximo turno precisa saber?" style={{minHeight:52}}/></div>}
+    </div>
+  );
+}
+
+function ChkItem({item,resp,neg,onAns,onNeg,showErr}){
+  const lvlCls={critico:'lvc',importante:'lvi',rotina:'lvr'}[item.n]||'lvr';
+  const itemCls={critico:'lc',importante:'li',rotina:'lr'}[item.n]||'lr';
+  return(
+    <div className={`cki ${itemCls}`}>
+      <span className={`lvl ${lvlCls}`}>{item.n}</span>
+      <div className="cki-title">{item.ti}</div>
+      <div className="cki-desc">{item.d}</div>
+      <div className="ans-row">
+        <button className={`abtn${resp==='sim'?' as':''}`} onClick={()=>onAns(item.id,'sim')}>✓ SIM</button>
+        <button className={`abtn${resp==='nao'?' an':''}`} onClick={()=>onAns(item.id,'nao')}>✗ NÃO</button>
+        <button className={`abtn${resp==='na'?' ana':''}`} onClick={()=>onAns(item.id,'na')}>— N/A</button>
+      </div>
+      {!resp&&showErr&&<div className="errmsg" style={{marginTop:5}}>⚠ Resposta obrigatória</div>}
+      {resp==='nao'&&<NegFields data={neg} onChange={d=>onNeg(item.id,d)}/>}
+    </div>
+  );
+}
+
+function SecAcc({secao,emoji,items,resps,negs,onAns,onNeg,showErr}){
+  const [open,setOpen]=useState(true);
+  const tot=items.length,resp=items.filter(i=>resps[i.id]).length,fl=items.filter(i=>resps[i.id]==='nao').length;
+  const hasErr=showErr&&items.some(i=>!resps[i.id]||(resps[i.id]==='nao'&&(!negs[i.id]?.just||!negs[i.id]?.acao)));
+  return(
+    <div className="acc">
+      <div className={`acc-head${hasErr?' aerr':''}`} onClick={()=>setOpen(o=>!o)}>
+        <div className="acc-hl"><span style={{fontSize:18}}>{emoji}</span><div><div className="acc-name">{secao}</div><div className="acc-meta">{resp}/{tot} respondidos{fl>0?` · ${fl} NÃO`:''}</div></div></div>
+        <span className={`acc-chev${open?' open':''}`}>▾</span>
+      </div>
+      {open&&<div style={{background:'#FAFAFA'}}>{items.map(item=><ChkItem key={item.id} item={item} resp={resps[item.id]} neg={negs[item.id]} onAns={onAns} onNeg={onNeg} showErr={showErr}/>)}</div>}
+    </div>
+  );
+}
+
+/* ═══════════════════════════
+   SENDING OVERLAY
+═══════════════════════════ */
+function SendingOverlay({steps}){
+  return(
+    <div className="overlay">
+      <div className="overlay-card">
+        <div className="spin"/>
+        <div className="ol-title">Enviando checklist...</div>
+        <div className="ol-sub">Aguarde enquanto processamos e registramos o fechamento do turno.</div>
+        <div className="ol-steps">
+          {steps.map((s,i)=><div key={i} className={`ol-step ${s.st==='ok'?'step-ok':s.st==='go'?'step-go':'step-wait'}`}><span>{s.st==='ok'?'✓':s.st==='go'?'⏳':'○'}</span><span>{s.label}</span></div>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════
+   SUMMARY + SHARE SCREEN
+═══════════════════════════ */
+function SummaryScreen({ident,resps,negs,ff,decl,items,onBack,webhookOk}){
+  const [copyFlash,setCopyFlash]=useState(false);
+  const flashRef=useRef();
+
+  const total=items.length;
+  const falhas=items.filter(i=>resps[i.id]==='nao').length;
+  const criticos=items.filter(i=>i.n==='critico'&&resps[i.id]==='nao').length;
+  const pendencias=Object.values(negs).filter(d=>d?.prox==='sim').length;
+  const respondidos=items.filter(i=>resps[i.id]).length;
+  const naItems=items.filter(i=>resps[i.id]==='na').length;
+  const score=Math.max(0,Math.round(100-(falhas/total*40)-(criticos*10)-(pendencias*5)));
+  const status=criticos>0?'CRÍTICO':falhas>0?'CONFORME COM RESSALVAS':pendencias>0?'COM PENDÊNCIAS':'CONFORME ✅';
+  const scoreColor=score>=80?'#00B37E':score>=60?'#F59E0B':'#E8001C';
+  const turnoLabel=ident.turno==='manha'?'🌅 Manhã':'🌙 Tarde / Noite';
+  const falhasItems=items.filter(i=>resps[i.id]==='nao');
+  const okItems=items.filter(i=>resps[i.id]==='sim');
+
+  function buildText(){
+    const sep='━━━━━━━━━━━━━━━━━━━━━━━━━━';
+    const lines=[
+      '🥟 *PASTEL DA CAMILA – FECHAMENTO DE TURNO*',
+      '📋 Sistema Koncluí',sep,
+      `👤 Responsável: *${ident.nome}*`,
+      `🕐 Turno: ${turnoLabel}`,
+      `📅 Data: ${ident.data}  ⏰ Início: ${ident.horaInicio}  Fechamento: ${decl.hora}`,sep,
+      `📊 Status: *${status}*`,
+      `🏆 Score do Turno: *${score}/100*`,sep,
+      `✅ Concluídos: ${respondidos}/${total}`,
+      `❌ Falhas: ${falhas}`,
+      `🔴 Críticos c/ problema: ${criticos}`,
+      `⏳ Pendências p/ próx. turno: ${pendencias}`,
+      `— N/A: ${naItems}`,
+    ];
+    if(falhasItems.length>0){
+      lines.push('',sep,'🔴 *FALHAS REGISTRADAS*',sep);
+      falhasItems.forEach((item,idx)=>{
+        const n=negs[item.id]||{};
+        lines.push(`${idx+1}. *[${item.n.toUpperCase()}] ${item.ti}*`);
+        lines.push(`   📂 Seção: ${item.s}`);
+        if(n.just) lines.push(`   ❓ Motivo: ${n.just}`);
+        if(n.acao) lines.push(`   🛠 Ação: ${n.acao}`);
+        if(n.impacto) lines.push(`   📈 Impacto: ${n.impacto}`);
+        if(n.resp) lines.push(`   👤 Responsável: ${n.resp}`);
+        if(n.prazo) lines.push(`   ⏰ Prazo: ${n.prazo}`);
+        if(n.escalar==='sim') lines.push(`   🚨 ESCALADO para liderança`);
+        if(n.prox==='sim') lines.push(`   ⚠️ FICA PARA O PRÓXIMO TURNO: ${n.det||''}`);
+        lines.push('');
+      });
+    }
+    if(ff.pendProx){lines.push(sep,'⏳ *PENDÊNCIAS PRÓXIMO TURNO*',ff.pendProx);}
+    if(ff.obsGerais){lines.push(sep,'📝 *OBSERVAÇÕES GERAIS*',ff.obsGerais);}
+    if(ff.manut==='sim') lines.push(`🔧 MANUTENÇÃO: ${ff.manutDet}`);
+    if(ff.compra==='sim') lines.push(`🛒 COMPRA/REPOSIÇÃO: ${ff.compraDet}`);
+    if(ff.disc==='sim') lines.push(`⚠️ PROBLEMA DISCIPLINAR: ${ff.discDet}`);
+    if(ff.tec==='sim') lines.push(`💻 PROBLEMA TÉCNICO: ${ff.tecDet}`);
+    lines.push(sep,`✍️ Declarado por: ${decl.nome}`,`🕐 Horário: ${decl.hora}`,'_Sistema Koncluí – Gestão Operacional de Franquias_');
+    return lines.join('\n');
+  }
+
+  function handleCopy(){
+    const txt=buildText();
+    const fallback=()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);};
+    (navigator.clipboard?navigator.clipboard.writeText(txt).catch(fallback):Promise.resolve(fallback())).then(()=>{
+      setCopyFlash(true);clearTimeout(flashRef.current);flashRef.current=setTimeout(()=>setCopyFlash(false),2200);
+    });
+  }
+
+  return(
+    <div className="sum-wrap">
+      <div className={`copy-flash${copyFlash?' on':''}`}>✅ Texto copiado! Abra o WhatsApp e cole no grupo</div>
+
+      <div className="sum-toolbar">
+        <div className="sum-toolbar-title">
+          <span>📋</span> Resumo do Turno — {turnoLabel}
+          {webhookOk&&<span style={{fontSize:10,background:'#D1FAE5',color:'#065F46',borderRadius:99,padding:'2px 8px',fontWeight:700}}>✓ Email enviado</span>}
+        </div>
+        <div className="sum-toolbar-hint">
+          <div className="sum-toolbar-hint-icon">📸</div>
+          <div className="sum-toolbar-hint-text">
+            <b>Para mandar a foto no grupo:</b> pressione <span className="sum-toolbar-hint-kbd">Win</span>+<span className="sum-toolbar-hint-kbd">Shift</span>+<span className="sum-toolbar-hint-kbd">S</span> → selecione o card branco → abra o WhatsApp → <span className="sum-toolbar-hint-kbd">Ctrl</span>+<span className="sum-toolbar-hint-kbd">V</span> no grupo de checklist. Depois clique em <b>Copiar Texto</b> e mande como mensagem.
+          </div>
+        </div>
+        <div className="sum-toolbar-actions">
+          <button className="tbtn-copy" onClick={handleCopy}>📋 Copiar Texto WhatsApp</button>
+          <button className="tbtn-back" onClick={onBack}>← Voltar</button>
+        </div>
+      </div>
+
+      <div className="sum-viewport">
+        <div className="sum-capture">
+          <div className="sum-hdr">
+            <div className="sum-hdr-left">
+              <div className="sum-brand">🥟 PASTEL DA CAMILA · KONCLUÍ · FECHAMENTO DE TURNO</div>
+              <div className="sum-name">{ident.nome}</div>
+              <div className="sum-meta">{turnoLabel} · {ident.data} · Início: {ident.horaInicio} · Fechamento: {decl.hora}</div>
+              <div className="sum-status-badge" style={{background:score>=80?'rgba(0,179,126,.2)':score>=60?'rgba(245,158,11,.2)':'rgba(232,0,28,.2)',color:score>=80?'#065F46':score>=60?'#92400E':'#991B1B'}}>{status}</div>
+            </div>
+            <div className="score-ring" style={{borderColor:scoreColor}}>
+              <div className="score-n" style={{color:scoreColor}}>{score}</div>
+              <div className="score-l">SCORE</div>
+            </div>
+          </div>
+
+          <div className="sum-kpi">
+            <div className="kpi-box"><div className="kpi-n" style={{color:'var(--green)'}}>{respondidos}</div><div className="kpi-l">✅ Concluídos</div></div>
+            <div className="kpi-box"><div className="kpi-n" style={{color:falhas>0?'var(--red)':'var(--green)'}}>{falhas}</div><div className="kpi-l">❌ Falhas</div></div>
+            <div className="kpi-box"><div className="kpi-n" style={{color:criticos>0?'var(--red)':'var(--green)'}}>{criticos}</div><div className="kpi-l">🔴 Críticos</div></div>
+            <div className="kpi-box"><div className="kpi-n" style={{color:pendencias>0?'var(--orange)':'var(--green)'}}>{pendencias}</div><div className="kpi-l">⏳ Pendências</div></div>
+          </div>
+
+          <div className="sum-body">
+            <div className="sum-col">
+              <div className="sum-col-title">🔴 Falhas e Justificativas ({falhasItems.length})</div>
+              {falhasItems.length===0&&(
+                <div className="occ-item occ-ok">
+                  <div className="occ-t" style={{color:'var(--green)'}}>✅ Nenhuma falha neste turno!</div>
+                  <div className="occ-d">Todos os itens foram cumpridos corretamente.</div>
+                </div>
+              )}
+              {falhasItems.map((item,i)=>{
+                const n=negs[item.id]||{};
+                return(
+                  <div key={i} className="occ-item">
+                    <div className="occ-t">
+                      <span className={`lvl ${item.n==='critico'?'lvc':item.n==='importante'?'lvi':'lvr'}`} style={{fontSize:8,marginRight:5}}>{item.n}</span>
+                      {item.e} {item.ti}
+                    </div>
+                    <div className="occ-d" style={{color:'var(--text3)',marginBottom:4}}>📂 {item.s}</div>
+                    {n.just&&<div className="occ-d"><b>❓ Motivo:</b> {n.just}</div>}
+                    {n.acao&&<div className="occ-d"><b>🛠 Ação:</b> {n.acao}</div>}
+                    {n.impacto&&<div className="occ-d"><b>📈 Impacto:</b> {n.impacto}</div>}
+                    {n.resp&&<div className="occ-d"><b>👤 Resp:</b> {n.resp}{n.prazo&&<span style={{color:'var(--orange)'}}> · ⏰ {n.prazo}</span>}</div>}
+                    {n.escalar==='sim'&&<div className="occ-d" style={{color:'var(--red)',fontWeight:700}}>🚨 Escalado para liderança</div>}
+                    {n.prox==='sim'&&<div className="occ-d" style={{color:'var(--orange)',fontWeight:700,marginTop:3}}>⚠️ PENDÊNCIA PRÓX. TURNO: {n.det||'(ver detalhes)'}</div>}
+                  </div>
+                );
+              })}
+              {(ff.pendProx||ff.manut==='sim'||ff.compra==='sim'||ff.disc==='sim'||ff.tec==='sim')&&(
+                <div style={{marginTop:10}}>
+                  <div className="sum-col-title" style={{marginTop:8}}>⚙️ Ações Necessárias</div>
+                  {ff.manut==='sim'&&<div className="occ-item" style={{borderLeftColor:'var(--orange)'}}><div className="occ-t">🔧 Manutenção</div><div className="occ-d">{ff.manutDet}</div></div>}
+                  {ff.compra==='sim'&&<div className="occ-item" style={{borderLeftColor:'var(--blue)'}}><div className="occ-t">🛒 Compra / Reposição</div><div className="occ-d">{ff.compraDet}</div></div>}
+                  {ff.disc==='sim'&&<div className="occ-item" style={{borderLeftColor:'var(--red)'}}><div className="occ-t">⚠️ Problema Disciplinar</div><div className="occ-d">{ff.discDet}</div></div>}
+                  {ff.tec==='sim'&&<div className="occ-item" style={{borderLeftColor:'var(--purple)'}}><div className="occ-t">💻 Problema Técnico</div><div className="occ-d">{ff.tecDet}</div></div>}
+                  {ff.pendProx&&<div className="occ-item" style={{borderLeftColor:'var(--orange)'}}><div className="occ-t">⏳ Pendências Próximo Turno</div><div className="occ-d">{ff.pendProx}</div></div>}
+                </div>
+              )}
+            </div>
+            <div className="sum-col">
+              <div className="sum-col-title">✅ Itens Cumpridos ({okItems.length}/{total})</div>
+              {[...new Set(okItems.map(i=>i.s))].map(sec=>{
+                const si=okItems.filter(i=>i.s===sec);
+                return(
+                  <div key={sec} style={{marginBottom:9}}>
+                    <div style={{fontSize:10,fontWeight:700,color:'var(--text3)',textTransform:'uppercase',letterSpacing:.4,marginBottom:3,display:'flex',alignItems:'center',gap:4}}>
+                      <span>{si[0]?.e}</span>{sec}
+                      <span style={{background:'#D1FAE5',color:'#065F46',borderRadius:99,padding:'1px 7px',fontSize:9,fontWeight:800}}>{si.length}</span>
+                    </div>
+                    {si.map((item,i)=>(
+                      <div key={i} style={{display:'flex',alignItems:'flex-start',gap:5,padding:'3px 0',borderBottom:'1px solid #F5F5F5'}}>
+                        <span style={{color:'var(--green)',fontWeight:800,fontSize:11,marginTop:1,flexShrink:0}}>✓</span>
+                        <div style={{fontSize:11,color:'var(--text2)',lineHeight:1.4}}>{item.ti}</div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+              {ff.obsGerais&&(
+                <div style={{marginTop:10,background:'#F8F8F8',borderRadius:6,padding:'10px 12px'}}>
+                  <div style={{fontFamily:"'Sora',sans-serif",fontSize:10,fontWeight:700,marginBottom:3,color:'var(--text2)',textTransform:'uppercase',letterSpacing:.5}}>📝 Observações</div>
+                  <div style={{fontSize:11,color:'var(--text2)',lineHeight:1.5}}>{ff.obsGerais}</div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="sum-footer">
+            <div className="sum-footer-decl">"Declaro que este checklist representa a situação real do turno."</div>
+            <div className="sum-footer-sig">{decl.nome} · {decl.hora} · Koncluí · {todayFmt()}</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{background:'#111',padding:'9px 16px',display:'flex',alignItems:'center',gap:10,flexShrink:0,borderTop:'1px solid #2a2a2a'}}>
+        <div style={{flex:1,fontSize:11,color:'#888'}}>
+          {webhookOk?'✅ Relatório enviado por email automaticamente.':'⚠️ Email não confirmado. Copie o texto e mande manualmente no grupo.'}
+        </div>
+        <button onClick={handleCopy} className="tbtn-copy" style={{fontSize:11,padding:'7px 14px',whiteSpace:'nowrap'}}>📋 Copiar Texto</button>
+        <button onClick={()=>window.print()} style={{background:'#2a2a2a',color:'#aaa',border:'1px solid #3a3a3a',borderRadius:'var(--rs)',padding:'7px 12px',fontFamily:"'Sora',sans-serif",fontSize:11,fontWeight:700}}>🖨️ Print</button>
+      </div>
+    </div>
+  );
+}
+
+
+/* ═══════════════════════════
+   CHECKLIST SCREEN
+═══════════════════════════ */
+function ChecklistScreen({user,onLogout,onBack}){
+  const CK_USER_KEY=`konclui_ck_${user.login}`;
+  const [screen,setScreen]=useState('entry');
+  const [ident,setIdent]=useState(null);
+  const [resps,setResps]=useState({});
+  const [negs,setNegs]=useState({});
+  const [ff,setFF]=useState({obsGerais:'',pendProx:'',manut:'',manutDet:'',compra:'',compraDet:'',disc:'',discDet:'',tec:'',tecDet:''});
+  const [decl,setDecl]=useState({checked:false,nome:user.name,hora:''});
+  const [showErr,setShowErr]=useState(false);
+  const [valErrs,setValErrs]=useState([]);
+  const [sending,setSending]=useState(false);
+  const [sendSteps,setSendSteps]=useState([]);
+  const [webhookOk,setWebhookOk]=useState(true);
+  const [toast,showToast]=useToast();
+
+  useEffect(()=>{
+    try{
+      const s=JSON.parse(localStorage.getItem(CK_USER_KEY));
+      if(s?.ident){setIdent(s.ident);setResps(s.resps||{});setNegs(s.negs||{});setFF(s.ff||ff);setScreen('checklist');}
+    }catch{}
+  },[]);
+
+  useEffect(()=>{
+    if(!ident)return;
+    localStorage.setItem(CK_USER_KEY,JSON.stringify({ident,resps,negs,ff}));
+  },[ident,resps,negs,ff]);
+
+  const items=useMemo(()=>ident?ITEMS.filter(i=>i.t===(ident.turno==='manha'?'manha':'tarde')):[],[ident]);
+  const secs=useMemo(()=>ident?.turno==='manha'?SEC_MANHA:SEC_TARDE,[ident]);
+
+  const stats=useMemo(()=>{
+    const tot=items.length,resp=items.filter(i=>resps[i.id]).length;
+    const fl=items.filter(i=>resps[i.id]==='nao').length;
+    const cr=items.filter(i=>i.n==='critico'&&resps[i.id]==='nao').length;
+    return{tot,resp,fl,cr,pend:tot-resp,pct:tot>0?Math.round(resp/tot*100):0};
+  },[items,resps]);
+
+  const statusInfo=useMemo(()=>{
+    if(stats.cr>0)return{txt:'Crítico',cls:'sk'};
+    if(stats.fl>0)return{txt:'Com Ressalvas',cls:'sa'};
+    if(stats.pend>0)return{txt:'Em Andamento',cls:'sa'};
+    return{txt:'Conforme',cls:'sc'};
+  },[stats]);
+
+  function setF(k,v){setFF(f=>({...f,[k]:v}));}
+  function onAns(id,val){setResps(r=>({...r,[id]:val}));if(val!=='nao')setNegs(n=>{const c={...n};delete c[id];return c;});}
+  function onNeg(id,d){setNegs(n=>({...n,[id]:d}));}
+
+  function validate(){
+    const errs=[];
+    items.forEach(item=>{
+      if(!resps[item.id]){errs.push(`"${item.ti}" — sem resposta`);return;}
+      if(resps[item.id]==='nao'){
+        const d=negs[item.id]||{};
+        if(!d.just) errs.push(`"${item.ti}" — justificativa obrigatória`);
+        if(!d.acao) errs.push(`"${item.ti}" — ação tomada obrigatória`);
+        if(item.n==='critico'&&!d.resp) errs.push(`"${item.ti}" — responsável obrigatório (crítico)`);
+        if(item.n==='critico'&&!d.prazo) errs.push(`"${item.ti}" — prazo obrigatório (crítico)`);
+        if(d.prox==='sim'&&!d.det) errs.push(`"${item.ti}" — detalhe da pendência obrigatório`);
+      }
+    });
+    ['manut','compra','disc','tec'].forEach(k=>{if(ff[k]==='sim'&&!ff[k+'Det'])errs.push(`Detalhe obrigatório: ${k}`);});
+    if(!decl.checked) errs.push('Declaração final não marcada');
+    if(!decl.nome.trim()) errs.push('Nome na declaração obrigatório');
+    return errs;
+  }
+
+  async function handleEnviar(){
+    const errs=validate();setValErrs(errs);setShowErr(true);
+    if(errs.length>0){window.scrollTo({top:0,behavior:'smooth'});return;}
+    const hora=nowTime();setDecl(d=>({...d,hora}));
+
+    const falhasItems=items.filter(i=>resps[i.id]==='nao');
+    const total=items.length,falhas=falhasItems.length;
+    const criticos=falhasItems.filter(i=>i.n==='critico').length;
+    const pendencias=Object.values(negs).filter(d=>d?.prox==='sim').length;
+    const score=Math.max(0,Math.round(100-(falhas/total*40)-(criticos*10)-(pendencias*5)));
+    const status=criticos>0?'Crítico':falhas>0?'Com Ressalvas':'Conforme';
+
+    setSending(true);
+    setSendSteps([
+      {label:'Validando dados...',st:'go'},
+      {label:'Salvando registro local...',st:'wait'},
+      {label:'Enviando para central (Make)...',st:'wait'},
+      {label:'Gerando confirmação...',st:'wait'},
+    ]);
+
+    await new Promise(r=>setTimeout(r,600));
+    setSendSteps(s=>{const c=[...s];c[0]={...c[0],st:'ok'};c[1]={...c[1],st:'go'};return c;});
+
+    // Save locally
+    try{
+      const all=JSON.parse(localStorage.getItem(CK_KEY)||'[]');
+      all.push({id:Date.now(),user:user.name,login:user.login,turno:ident.turno,data:todayISO(),dataFmt:ident.data,hora,score,total,falhas,criticos,pendencias,status:status.toLowerCase().replace(/ /g,'_'),ff,negs,isDemo:false});
+      localStorage.setItem(CK_KEY,JSON.stringify(all.slice(-300)));
+    }catch{}
+
+    await new Promise(r=>setTimeout(r,400));
+    setSendSteps(s=>{const c=[...s];c[1]={...c[1],st:'ok'};c[2]={...c[2],st:'go'};return c;});
+
+    // Build text payload for webhook (formatted like WhatsApp)
+    const sep='━━━━━━━━━━━━━━━━━━━━━━━━━━';
+    const tLabel=ident.turno==='manha'?'Manhã':'Tarde/Noite';
+    const wppLines=[
+      '🥟 PASTEL DA CAMILA – FECHAMENTO DE TURNO',
+      '📋 Sistema Koncluí',sep,
+      `👤 Responsável: ${user.name}`,
+      `🕐 Turno: ${tLabel}`,
+      `📅 Data: ${ident.data}  ⏰ Início: ${ident.horaInicio}  Fechamento: ${hora}`,sep,
+      `📊 Status: ${status}`,
+      `🏆 Score do Turno: ${score}/100`,sep,
+      `✅ Concluídos: ${items.filter(i=>resps[i.id]).length}/${total}`,
+      `❌ Falhas: ${falhas}`,
+      `🔴 Críticos c/ problema: ${criticos}`,
+      `⏳ Pendências p/ próx. turno: ${pendencias}`,
+    ];
+    if(falhasItems.length>0){
+      wppLines.push('',sep,'🔴 FALHAS REGISTRADAS',sep);
+      falhasItems.forEach((item,idx)=>{
+        const n=negs[item.id]||{};
+        wppLines.push(`${idx+1}. [${item.n.toUpperCase()}] ${item.ti}`);
+        wppLines.push(`   Seção: ${item.s}`);
+        if(n.just) wppLines.push(`   Motivo: ${n.just}`);
+        if(n.acao) wppLines.push(`   Ação: ${n.acao}`);
+        if(n.resp) wppLines.push(`   Responsável: ${n.resp}${n.prazo?' | Prazo: '+n.prazo:''}`);
+        if(n.escalar==='sim') wppLines.push(`   ESCALADO para liderança`);
+        if(n.prox==='sim') wppLines.push(`   ⚠️ PENDÊNCIA PRÓXIMO TURNO: ${n.det||''}`);
+        wppLines.push('');
+      });
+    }
+    if(ff.pendProx) wppLines.push(sep,`⏳ PENDÊNCIAS: ${ff.pendProx}`);
+    if(ff.obsGerais) wppLines.push(sep,`📝 OBSERVAÇÕES: ${ff.obsGerais}`);
+    if(ff.manut==='sim') wppLines.push(`🔧 MANUTENÇÃO: ${ff.manutDet}`);
+    if(ff.compra==='sim') wppLines.push(`🛒 COMPRA: ${ff.compraDet}`);
+    if(ff.disc==='sim') wppLines.push(`⚠️ DISCIPLINA: ${ff.discDet}`);
+    if(ff.tec==='sim') wppLines.push(`💻 TÉCNICO: ${ff.tecDet}`);
+    wppLines.push(sep,`✍️ ${decl.nome} · ${hora} · Koncluí`);
+    const textoFinal=wppLines.join('\n');
+
+    const ok=await sendWebhook(textoFinal);
+    setWebhookOk(ok);
+    await new Promise(r=>setTimeout(r,400));
+    setSendSteps(s=>{const c=[...s];c[2]={...c[2],st:ok?'ok':'ok'};c[3]={...c[3],st:'go'};return c;});
+    await new Promise(r=>setTimeout(r,500));
+    setSendSteps(s=>{const c=[...s];c[3]={...c[3],st:'ok'};return c;});
+    await new Promise(r=>setTimeout(r,400));
+    setSending(false);
+    localStorage.removeItem(CK_USER_KEY);
+    setScreen('summary');
+  }
+
+  function handleLimpar(){
+    if(!window.confirm('Limpar checklist atual?'))return;
+    localStorage.removeItem(CK_USER_KEY);
+    setIdent(null);setResps({});setNegs({});
+    setFF({obsGerais:'',pendProx:'',manut:'',manutDet:'',compra:'',compraDet:'',disc:'',discDet:'',tec:'',tecDet:''});
+    setDecl({checked:false,nome:user.name,hora:''});setShowErr(false);setValErrs([]);setScreen('entry');
+  }
+
+  const tLabel=ident?.turno==='manha'?'🌅 Manhã':'🌙 Tarde/Noite';
+
+  // ENTRY
+  if(screen==='entry')return(
+    <div>
+      <div className="hdr"><div className="hdr-in"><div><div className="hdr-brand">Pastel da Camila · Koncluí</div><div className="hdr-title">Checklist Subgerência</div></div><div style={{display:'flex',gap:6}}><div className="hdr-user">👤 {user.name}</div>{onBack&&<button className="hdr-out" onClick={onBack}>← Hub</button>}<button className="hdr-out" onClick={onLogout}>Sair</button></div></div></div>
+      <div className="banner"><div className="banner-t">📌 REGRAS KONCLUÍ</div><div className="banner-i">Preencha com responsabilidade — cada resposta é um registro real.</div><div className="banner-i">Resposta NÃO exige justificativa, ação e responsável obrigatórios.</div><div className="banner-i">Itens críticos não podem ficar sem tratamento completo.</div><div className="banner-i">Ao finalizar, você receberá a imagem para mandar no grupo.</div></div>
+      <div className="card">
+        <div className="card-t">🌅 Selecione seu turno</div>
+        <div className="turno-grid">
+          <button className="tbtn" onClick={()=>{setIdent({nome:user.name,turno:'manha',data:todayFmt(),horaInicio:nowTime()});setScreen('checklist');}}><span className="tbtn-icon">🌅</span>Manhã</button>
+          <button className="tbtn" onClick={()=>{setIdent({nome:user.name,turno:'tarde',data:todayFmt(),horaInicio:nowTime()});setScreen('checklist');}}><span className="tbtn-icon">🌙</span>Tarde / Noite</button>
+        </div>
+        <div style={{marginTop:12,fontSize:12,color:'var(--text2)',lineHeight:1.6,padding:'10px',background:'#F8F8F8',borderRadius:'var(--rs)'}}>Olá, <b>{user.name}</b>! O sistema carrega apenas os itens do seu turno, garantindo foco e agilidade.</div>
+      </div>
+    </div>
+  );
+
+  if(screen==='summary')return <SummaryScreen ident={ident} resps={resps} negs={negs} ff={ff} decl={decl} items={items} onBack={()=>setScreen('checklist')} webhookOk={webhookOk}/>;
+
+  // CHECKLIST VIEW
+  return(
+    <div>
+      {sending&&<SendingOverlay steps={sendSteps}/>}
+      <Toast msg={toast.msg} show={toast.show}/>
+      <div className="hdr"><div className="hdr-in"><div><div className="hdr-brand">Pastel da Camila · Koncluí</div><div className="hdr-title">{tLabel}</div></div><div style={{display:'flex',gap:6}}><div className="hdr-user">👤 {user.name}</div>{onBack&&<button className="hdr-out" onClick={onBack}>← Hub</button>}<button className="hdr-out" onClick={onLogout}>Sair</button></div></div></div>
+
+      <div className="rpanel">
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:7}}>
+          <div style={{fontFamily:"'Sora',sans-serif",fontSize:12,fontWeight:700}}>Painel de Responsabilidade</div>
+          <span className={`rstatus ${statusInfo.cls}`}>{statusInfo.txt}</span>
+        </div>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:4,textAlign:'center'}}>
+          <div><div style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:800,color:'var(--red)'}}>{stats.fl}</div><div style={{fontSize:9,color:'var(--text3)',textTransform:'uppercase'}}>Falhas</div></div>
+          <div><div style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:800,color:'var(--orange)'}}>{stats.cr}</div><div style={{fontSize:9,color:'var(--text3)',textTransform:'uppercase'}}>Críticos</div></div>
+          <div><div style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:800,color:'var(--text2)'}}>{stats.pend}</div><div style={{fontSize:9,color:'var(--text3)',textTransform:'uppercase'}}>Pendentes</div></div>
+        </div>
+      </div>
+
+      <div className="prog">
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:3}}>
+          <div style={{fontFamily:"'Sora',sans-serif",fontSize:12,fontWeight:700}}>Progresso</div>
+          <div style={{fontFamily:"'Sora',sans-serif",fontSize:17,fontWeight:800,color:'var(--red)'}}>{stats.pct}%</div>
+        </div>
+        <div className="prog-bar-bg"><div className="prog-bar" style={{width:`${stats.pct}%`}}/></div>
+        <div className="prog-stats">
+          <div><div className="psv" style={{color:'var(--green)'}}>{stats.resp}</div><div className="psl">Resp.</div></div>
+          <div><div className="psv" style={{color:'var(--text3)'}}>{stats.pend}</div><div className="psl">Pend.</div></div>
+          <div><div className="psv" style={{color:'var(--red)'}}>{stats.fl}</div><div className="psl">Falhas</div></div>
+          <div><div className="psv" style={{color:'var(--orange)'}}>{stats.cr}</div><div className="psl">Críticos</div></div>
+        </div>
+        <div style={{marginTop:8,fontSize:11,color:'var(--text2)',textAlign:'center',fontWeight:600}}>
+          {stats.pct===0?'Vamos começar!':stats.pct<50?'Continue com atenção.':stats.pct<90?'⚠️ Finalize os itens restantes.':stats.pct<100?'🔥 Quase lá!':'✅ Todos respondidos. Revise e envie.'}
+        </div>
+      </div>
+
+      {showErr&&valErrs.length>0&&(
+        <div className="valpanel">
+          <div className="valtitle">🚫 Corrija antes de enviar ({valErrs.length})</div>
+          {valErrs.slice(0,7).map((e,i)=><div key={i} className="valitem">{e}</div>)}
+          {valErrs.length>7&&<div style={{fontSize:11,color:'var(--red)',fontWeight:600,marginTop:5}}>...e mais {valErrs.length-7} erros.</div>}
+        </div>
+      )}
+
+      {secs.map(s=>{
+        const its=items.filter(i=>i.s===s);
+        return <SecAcc key={s} secao={s} emoji={its[0]?.e||'📋'} items={its} resps={resps} negs={negs} onAns={onAns} onNeg={onNeg} showErr={showErr}/>;
+      })}
+
+      <div className="card">
+        <div className="card-t">📝 Campos Finais</div>
+        <div className="f"><label>Observações gerais</label><textarea value={ff.obsGerais} onChange={e=>setF('obsGerais',e.target.value)} placeholder="Ocorrências relevantes do turno..."/></div>
+        <div className="f"><label>Pendências para o próximo turno</label><textarea value={ff.pendProx} onChange={e=>setF('pendProx',e.target.value)} placeholder="O que o próximo turno precisa resolver?"/></div>
+        {[{k:'manut',l:'⚙️ Manutenção necessária?',dk:'manutDet',ph:'Descreva...'},{k:'compra',l:'🛒 Compra/Reposição?',dk:'compraDet',ph:'O que precisa?'},{k:'disc',l:'⚠️ Problema disciplinar?',dk:'discDet',ph:'Descreva...'},{k:'tec',l:'💻 Problema técnico?',dk:'tecDet',ph:'Descreva...'}].map(({k,l,dk,ph})=>(
+          <div key={k}>
+            <div className="togrow"><div className="toglbl">{l}</div><div className="togbtns"><button className={`togbtn${ff[k]==='sim'?' ts':''}`} onClick={()=>setF(k,'sim')}>Sim</button><button className={`togbtn${ff[k]==='nao'?' tn':''}`} onClick={()=>setF(k,'nao')}>Não</button></div></div>
+            {ff[k]==='sim'&&<div className="f" style={{marginTop:6}}><textarea value={ff[dk]} onChange={e=>setF(dk,e.target.value)} placeholder={ph} style={{minHeight:52}} className={showErr&&!ff[dk]?'ferr':''}/>{showErr&&!ff[dk]&&<div className="errmsg">Obrigatório</div>}</div>}
+          </div>
+        ))}
+      </div>
+
+      <div className="card">
+        <div className="card-t">✍️ Declaração Final</div>
+        <div className={`decl${decl.checked?' on':''}`} onClick={()=>setDecl(d=>({...d,checked:!d.checked}))}>
+          <div className={`decl-chk${decl.checked?' on':''}`}>{decl.checked&&<span style={{color:'#fff',fontWeight:800,fontSize:13}}>✓</span>}</div>
+          <div className="decl-txt">Declaro que este checklist representa a situação real do turno. Assumo a responsabilidade pelas informações registradas.</div>
+        </div>
+        {showErr&&!decl.checked&&<div className="errmsg" style={{marginTop:6}}>Declaração obrigatória</div>}
+        <div className="f" style={{marginTop:12}}><label>Confirme seu nome *</label><input value={decl.nome} onChange={e=>setDecl(d=>({...d,nome:e.target.value}))} className={showErr&&!decl.nome.trim()?'ferr':''}/>{showErr&&!decl.nome.trim()&&<div className="errmsg">Nome obrigatório</div>}</div>
+      </div>
+
+      <div className="fab">
+        <button className="fabbtn fab-s" onClick={()=>showToast('✅ Rascunho salvo!')}>💾 Salvar</button>
+        <button className="fabbtn fab-p" onClick={handleEnviar} disabled={sending}>🚀 Finalizar Turno</button>
+        <button className="fabbtn fab-d" style={{flex:'0 0 46px',fontSize:17}} onClick={handleLimpar}>🗑</button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════
+   CEO DASHBOARD
+═══════════════════════════ */
+function CEODashboard({user,onLogout,onBack}){
+  const [tab,setTab]=useState('overview');
+  const realData=useMemo(()=>{try{return JSON.parse(localStorage.getItem(CK_KEY)||'[]');}catch{return[];}});
+  const merged=useMemo(()=>realData.length===0?DEMO:[...realData,...DEMO.slice(0,6).map(d=>({...d,isDemo:true}))]  ,[realData]);
+
+  const kpi=useMemo(()=>{
+    const r=merged,tot=r.length;
+    const avg=Math.round(r.reduce((a,b)=>a+b.score,0)/Math.max(tot,1));
+    const fl=r.reduce((a,b)=>a+b.falhas,0),cr=r.reduce((a,b)=>a+b.criticos,0),pend=r.reduce((a,b)=>a+(b.pendencias||0),0);
+    const conf=r.filter(d=>d.status==='conforme').length;
+    return{tot,avg,fl,cr,pend,conf,taxa:Math.round(conf/Math.max(tot,1)*100)};
+  },[merged]);
+
+  const scoreByDay=useMemo(()=>DAYS.map((day,di)=>{
+    const d=merged.filter(x=>x.dayIdx===di||x.day===day);
+    return{day,score:d.length?Math.round(d.reduce((a,b)=>a+b.score,0)/d.length):0,falhas:d.reduce((a,b)=>a+b.falhas,0)};
+  }),[merged]);
+
+  const ranking=useMemo(()=>{
+    const names=[...new Set(merged.map(d=>d.user||d.name))];
+    return names.map(name=>{
+      const d=merged.filter(x=>(x.user||x.name)===name);
+      return{name,avg:Math.round(d.reduce((a,b)=>a+b.score,0)/Math.max(d.length,1)),turnos:d.length,falhas:d.reduce((a,b)=>a+b.falhas,0)};
+    }).sort((a,b)=>b.avg-a.avg);
+  },[merged]);
+
+  const alertas=useMemo(()=>{
+    const a=[];
+    merged.filter(d=>d.criticos>0).slice(0,5).forEach(d=>a.push({tipo:'critico',msg:`${d.user||d.name} · ${d.turno==='manha'?'Manhã':'Tarde'} · ${d.dataFmt||d.day}`,sub:`${d.criticos} crítico(s) sem tratamento · Score ${d.score}`}));
+    merged.filter(d=>d.pendencias>0).slice(0,3).forEach(d=>a.push({tipo:'pend',msg:`Pendência aberta — ${d.user||d.name}`,sub:`${d.pendencias} item(s) p/ próximo turno · Score ${d.score}`}));
+    return a.slice(0,8);
+  },[merged]);
+
+  const aColors=['#E8001C','#7C3AED','#2563EB','#F97316'];
+
+  return(
+    <div>
+      <div className="ceo-hdr">
+        <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between'}}>
+          <div>
+            <div style={{fontSize:10,opacity:.6,fontWeight:700,letterSpacing:1.5,textTransform:'uppercase',marginBottom:3}}>🥟 Pastel da Camila</div>
+            <div className="ceo-title">Visão CEO</div>
+            <div className="ceo-sub">Gestão Operacional de Franquias · Koncluí</div>
+            <div className="ceo-badge">👑 {user.name} · Acesso Total</div>
+          </div>
+          <button className="hdr-out" style={{background:'rgba(255,255,255,.12)',border:'1.5px solid rgba(255,255,255,.25)',color:'#fff',borderRadius:99,padding:'6px 12px',fontSize:10,fontWeight:700}} onClick={onLogout}>Sair</button>
+          {onBack&&<button style={{background:'rgba(255,255,255,.12)',border:'1.5px solid rgba(255,255,255,.25)',color:'#fff',borderRadius:99,padding:'6px 12px',fontSize:10,fontWeight:700,marginLeft:4}} onClick={onBack}>← Hub</button>}
+        </div>
+        <div style={{marginTop:10,fontSize:10,opacity:.55}}>{todayFmt()} · {realData.length>0?`${realData.length} turnos reais registrados`:'Modo demo — aguardando checklists'}</div>
+      </div>
+
+      <div className="cnav">
+        {[['overview','📊 Geral'],['ranking','🏆 Ranking'],['alertas','🚨 Alertas'],['turnos','📋 Turnos'],['tendencia','📈 Tendência']].map(([k,l])=>(
+          <button key={k} className={`cnav-btn${tab===k?' on':''}`} onClick={()=>setTab(k)}>{l}</button>
+        ))}
+      </div>
+
+      {tab==='overview'&&(<>
+        <div className="kpi-grid">
+          <div className="kpic kr"><div className="kpii">📊</div><div className="kpil">Score Médio</div><div className="kpiv">{kpi.avg}</div><div className="kpis">de 100 possíveis</div><span className={`trend ${kpi.avg>=80?'tu':kpi.avg>=60?'tf':'td'}`}>{kpi.avg>=80?'▲ Ótimo':kpi.avg>=60?'→ Regular':'▼ Atenção'}</span></div>
+          <div className="kpic kg"><div className="kpii">✅</div><div className="kpil">Conformidade</div><div className="kpiv">{kpi.taxa}%</div><div className="kpis">{kpi.conf}/{kpi.tot} turnos ok</div><span className={`trend ${kpi.taxa>=80?'tu':'td'}`}>{kpi.taxa>=80?'▲ Boa':'▼ Atenção'}</span></div>
+          <div className="kpic kr"><div className="kpii">❌</div><div className="kpil">Total Falhas</div><div className="kpiv">{kpi.fl}</div><div className="kpis">em {kpi.tot} turnos</div></div>
+          <div className="kpic ko"><div className="kpii">🔴</div><div className="kpil">Críticos</div><div className="kpiv">{kpi.cr}</div><div className="kpis">sem tratamento</div></div>
+          <div className="kpic kb"><div className="kpii">⏳</div><div className="kpil">Pendências</div><div className="kpiv">{kpi.pend}</div><div className="kpis">entre turnos</div></div>
+          <div className="kpic kp"><div className="kpii">📋</div><div className="kpil">Turnos</div><div className="kpiv">{kpi.tot}</div><div className="kpis">total avaliados</div></div>
+        </div>
+        <div className="chart-card">
+          <div className="chart-t"><span>📊 Score por Dia</span><span style={{fontSize:10,color:'var(--text3)',fontWeight:600}}>média semanal</span></div>
+          <div className="barchart">
+            {scoreByDay.map((d,i)=>{
+              const h=d.score>0?Math.max((d.score/100)*90,4):2;
+              const c=d.score>=80?'var(--green)':d.score>=60?'var(--yellow)':'var(--red)';
+              return <div key={i} className="bw"><div className="bvl">{d.score||'–'}</div><div style={{flex:1,display:'flex',alignItems:'flex-end',width:'100%'}}><div className="bar" style={{height:`${h}%`,background:c}}/></div><div className="bl">{d.day}</div></div>;
+            })}
+          </div>
+        </div>
+        <div className="chart-card">
+          <div className="chart-t">🎯 Status dos Turnos</div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,textAlign:'center'}}>
+            {[['Conforme',merged.filter(d=>d.status==='conforme').length,'var(--green)'],['Ressalvas',merged.filter(d=>d.status==='ressalvas'||d.status==='com_ressalvas').length,'var(--yellow)'],['Crítico',merged.filter(d=>d.status==='critico').length,'var(--red)']].map(([l,v,c])=>(
+              <div key={l} style={{background:'#FAFAFA',borderRadius:'var(--rs)',padding:'14px 6px',borderTop:`3px solid ${c}`}}>
+                <div style={{fontFamily:"'Sora',sans-serif",fontSize:22,fontWeight:900,color:c}}>{v}</div>
+                <div style={{fontSize:10,color:'var(--text2)',fontWeight:700,marginTop:2}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="chart-card">
+          <div className="chart-t">🗓 Mapa de Conformidade</div>
+          <div style={{display:'flex',gap:8,fontSize:10,color:'var(--text3)',marginBottom:8,flexWrap:'wrap'}}>
+            <span>🟢 ≥80 Ótimo</span><span>🟡 60–79 Regular</span><span>🔴 &lt;60 Crítico</span>
+          </div>
+          <div style={{overflowX:'auto'}}>
+            <div className="hm-grid">
+              <div/>
+              {DAYS.map(d=><div key={d} style={{fontSize:8,fontWeight:700,color:'var(--text3)',textAlign:'center'}}>{d}</div>)}
+              {['Manhã','Tarde'].map(turno=>(
+                <React.Fragment key={turno}>
+                  <div style={{fontSize:8,fontWeight:700,color:'var(--text3)',display:'flex',alignItems:'center',paddingRight:3,whiteSpace:'nowrap'}}>{turno}</div>
+                  {DAYS.map((day,di)=>{
+                    const t=turno==='Manhã'?'manha':'tarde';
+                    const d=merged.find(x=>(x.dayIdx===di||x.day===day)&&x.turno===t);
+                    const sc=d?.score||0;
+                    const bg=sc>=80?'var(--green)':sc>=60?'var(--yellow)':sc>0?'var(--red)':'#E5E5E5';
+                    return <div key={day} className="hmc" style={{background:bg,opacity:sc>0?1:.3}}>{sc>0?sc:''}</div>;
+                  })}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        </div>
+      </>)}
+
+      {tab==='ranking'&&(
+        <div className="chart-card" style={{margin:'12px 12px 0'}}>
+          <div className="chart-t">🏆 Ranking de Subgerentes</div>
+          {ranking.map((u,i)=>(
+            <div key={u.name} className="rank-item">
+              <div className="rnum" style={{color:i===0?'#F59E0B':i===1?'#9CA3AF':'#B45309'}}>{i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>
+              <div className="ravatar" style={{background:aColors[i%aColors.length]}}>{u.name.charAt(0)}</div>
+              <div style={{flex:1}}>
+                <div className="rname">{u.name}</div>
+                <div className="rsub">{u.turnos} turnos · {u.falhas} falhas</div>
+                <div style={{marginTop:5,background:'#F0F0F0',borderRadius:99,height:5,overflow:'hidden'}}>
+                  <div style={{height:'100%',borderRadius:99,background:u.avg>=80?'var(--green)':u.avg>=60?'var(--yellow)':'var(--red)',width:`${u.avg}%`,transition:'width .5s'}}/>
+                </div>
+              </div>
+              <div className="rscore" style={{color:u.avg>=80?'var(--green)':u.avg>=60?'var(--yellow)':'var(--red)'}}>{u.avg}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab==='alertas'&&(
+        <div className="chart-card" style={{margin:'12px 12px 0'}}>
+          <div className="chart-t">🚨 Alertas Operacionais</div>
+          {alertas.length===0&&<div style={{textAlign:'center',padding:'24px 0',color:'var(--green)',fontFamily:"'Sora',sans-serif",fontWeight:700}}>✅ Nenhum alerta ativo!</div>}
+          {alertas.map((a,i)=>(
+            <div key={i} className="alert-item">
+              <div className={`adot ${a.tipo==='critico'?'adr':'ado'}`}/>
+              <div style={{flex:1}}><div className="at">{a.msg}</div><div className="as2">{a.sub}</div></div>
+              <div className="abadge" style={{background:a.tipo==='critico'?'#FEE2E2':'#FED7AA',color:a.tipo==='critico'?'#991B1B':'#9A3412'}}>{a.tipo==='critico'?'🔴 Crítico':'⏳ Pendência'}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab==='turnos'&&(
+        <div className="chart-card" style={{margin:'12px 12px 0'}}>
+          <div className="chart-t">📋 Histórico de Turnos</div>
+          <div style={{overflowX:'auto'}}>
+            <table className="shift-t">
+              <thead><tr><th>Responsável</th><th>Turno</th><th>Data</th><th>Score</th><th>Status</th><th>Falhas</th></tr></thead>
+              <tbody>
+                {merged.slice(0,25).map((d,i)=>{
+                  const sc=d.score,c=sc>=80?'var(--green)':sc>=60?'var(--yellow)':'var(--red)';
+                  const st=d.status==='conforme'?'Conforme':d.status==='critico'?'Crítico':'Ressalvas';
+                  return(
+                    <tr key={i} style={{opacity:d.isDemo?.75:1}}>
+                      <td><div style={{fontFamily:"'Sora',sans-serif",fontWeight:700,fontSize:12}}>{d.user||d.name}{d.isDemo&&<span style={{fontSize:9,color:'var(--text3)',marginLeft:4}}>(demo)</span>}</div></td>
+                      <td><span className="spill" style={{background:d.turno==='manha'?'#FEF3C7':'#EDE9FE',color:d.turno==='manha'?'#92400E':'#5B21B6'}}>{d.turno==='manha'?'🌅':'🌙'}</span></td>
+                      <td style={{fontSize:11,color:'var(--text2)'}}>{d.dataFmt||d.day}</td>
+                      <td><span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,color:c}}>{sc}</span></td>
+                      <td><span className="spill" style={{background:st==='Conforme'?'#D1FAE5':st==='Crítico'?'#FEE2E2':'#FEF3C7',color:st==='Conforme'?'#065F46':st==='Crítico'?'#991B1B':'#92400E'}}>{st}</span></td>
+                      <td style={{fontFamily:"'Sora',sans-serif",fontWeight:700,color:d.falhas>0?'var(--red)':'var(--green)'}}>{d.falhas}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {tab==='tendencia'&&(<>
+        <div className="chart-card" style={{margin:'12px 12px 0'}}>
+          <div className="chart-t">📈 Evolução Score – 7 dias</div>
+          <div className="barchart" style={{height:130}}>
+            {scoreByDay.map((d,i)=>{
+              const h=d.score>0?Math.max((d.score/100)*90,4):2;
+              const c=d.score>=80?'var(--green)':d.score>=60?'var(--yellow)':'var(--red)';
+              return <div key={i} className="bw"><div className="bvl" style={{fontSize:9}}>{d.score||'–'}</div><div style={{flex:1,display:'flex',alignItems:'flex-end',width:'100%',position:'relative'}}><div style={{position:'absolute',bottom:'80%',left:0,right:0,borderTop:'1px dashed #ddd'}}/><div className="bar" style={{height:`${h}%`,background:c}}/></div><div className="bl">{d.day}</div></div>;
+            })}
+          </div>
+          <div style={{marginTop:6,fontSize:10,color:'var(--text3)',textAlign:'center'}}>Linha tracejada = meta 80 pts</div>
+        </div>
+        <div className="chart-card">
+          <div className="chart-t">📉 Falhas por Dia</div>
+          <div className="barchart" style={{height:100}}>
+            {scoreByDay.map((d,i)=>{
+              const mx=Math.max(...scoreByDay.map(x=>x.falhas),1);
+              const h=d.falhas>0?Math.max((d.falhas/mx)*90,4):2;
+              return <div key={i} className="bw"><div className="bvl" style={{fontSize:9,color:'var(--red)'}}>{d.falhas||0}</div><div style={{flex:1,display:'flex',alignItems:'flex-end',width:'100%'}}><div className="bar" style={{height:`${h}%`,background:d.falhas>0?'var(--red)':'#E5E5E5'}}/></div><div className="bl">{d.day}</div></div>;
+            })}
+          </div>
+        </div>
+        <div className="chart-card">
+          <div className="chart-t">🎯 Métricas de Qualidade</div>
+          {[['Conformidade',`${kpi.taxa}%`,kpi.taxa,'var(--green)'],['Score Médio',`${kpi.avg}/100`,kpi.avg,'var(--blue)'],['Falhas/Turno',`${(kpi.fl/Math.max(kpi.tot,1)).toFixed(1)}`,Math.max(0,100-kpi.fl/Math.max(kpi.tot,1)*15),'var(--orange)']].map(([l,v,p,c])=>(
+            <div key={l} style={{marginBottom:12}}>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:4}}><div style={{fontSize:12,fontWeight:600}}>{l}</div><div style={{fontFamily:"'Sora',sans-serif",fontSize:13,fontWeight:800,color:c}}>{v}</div></div>
+              <div style={{background:'#F0F0F0',borderRadius:99,height:7,overflow:'hidden'}}><div style={{height:'100%',borderRadius:99,background:c,width:`${Math.min(p,100)}%`,transition:'width .5s'}}/></div>
+            </div>
+          ))}
+        </div>
+        <div className="chart-card">
+          <div style={{fontFamily:"'Sora',sans-serif",fontSize:12,fontWeight:700,marginBottom:11}}>🔮 Roadmap Koncluí</div>
+          {[['✅','Checklist digital com travas anti-maquiagem','Entregue'],['✅','Login por usuário com roles (CEO / Subgerente)','Entregue'],['✅','Painel CEO com KPIs e gráficos operacionais','Entregue'],['✅','Webhook Make + envio automático por email','Entregue'],['✅','Geração de imagem para grupo WhatsApp','Entregue'],['🔄','Banco de dados (Supabase) – dados persistentes','Próximo'],['🔄','Notificações automáticas WhatsApp via Evolution API','Próximo'],['🔄','Multi-unidade (gestão de rede de franquias)','Futuro'],['🔄','App nativo iOS/Android','Futuro'],['🔄','IA para detecção de padrões de falha','Futuro']].map(([icon,label,status],i)=>(
+            <div key={i} style={{display:'flex',alignItems:'center',gap:9,padding:'7px 0',borderBottom:'1px solid var(--border)'}}>
+              <span style={{fontSize:14}}>{icon}</span>
+              <div style={{flex:1,fontSize:12}}>{label}</div>
+              <span style={{fontSize:9,fontWeight:700,padding:'2px 7px',borderRadius:99,background:status==='Entregue'?'#D1FAE5':status==='Próximo'?'#FEF3C7':'#F3F4F6',color:status==='Entregue'?'#065F46':status==='Próximo'?'#92400E':'var(--text3)'}}>{status}</span>
+            </div>
+          ))}
+        </div>
+      </>)}
+      <div style={{height:20}}/>
+    </div>
+  );
+}
+
+/* ═══════════════════════════
+   ROOT
+═══════════════════════════ */
+/* ═══════════════════════════
+   SUPORTE HUB (Bruna)
+═══════════════════════════ */
+function SuporteHub({user,onLogout}){
+  const [mode,setMode]=useState(null); // null | 'ceo' | 'checklist'
+
+  if(mode==='ceo') return <CEODashboard user={user} onLogout={onLogout} onBack={()=>setMode(null)}/>;
+  if(mode==='checklist') return <ChecklistScreen user={user} onLogout={onLogout} onBack={()=>setMode(null)}/>;
+
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(145deg,#0d0d0d,#001a3a,#002a6e)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:24}}>
+      <div style={{background:'#fff',borderRadius:22,padding:'32px 24px',width:'100%',maxWidth:400,boxShadow:'0 30px 80px rgba(0,0,0,.45)'}}>
+        <div style={{textAlign:'center',marginBottom:28}}>
+          <div style={{fontSize:48,marginBottom:8}}>🛡️</div>
+          <div style={{fontFamily:"'Sora',sans-serif",fontSize:21,fontWeight:900}}>Olá, {user.name}!</div>
+          <div style={{fontSize:13,color:'var(--text3)',marginTop:4}}>Acesso de Suporte · O que deseja fazer?</div>
+        </div>
+
+        <div style={{display:'flex',flexDirection:'column',gap:12}}>
+          <button onClick={()=>setMode('ceo')} style={{
+            padding:'18px 16px',borderRadius:'var(--r)',background:'linear-gradient(135deg,#1A1A1A,#2a0008,var(--red-dark))',
+            color:'#fff',textAlign:'left',display:'flex',alignItems:'center',gap:14,border:'none',cursor:'pointer'
+          }}>
+            <span style={{fontSize:32}}>👁️</span>
+            <div>
+              <div style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:800}}>Painel Gerencial</div>
+              <div style={{fontSize:11,opacity:.75,marginTop:2}}>KPIs, ranking, alertas, histórico de turnos</div>
+            </div>
+          </button>
+
+          <button onClick={()=>setMode('checklist')} style={{
+            padding:'18px 16px',borderRadius:'var(--r)',background:'linear-gradient(135deg,var(--red-dark),var(--red))',
+            color:'#fff',textAlign:'left',display:'flex',alignItems:'center',gap:14,border:'none',cursor:'pointer'
+          }}>
+            <span style={{fontSize:32}}>📋</span>
+            <div>
+              <div style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:800}}>Preencher Checklist</div>
+              <div style={{fontSize:11,opacity:.75,marginTop:2}}>Suporte operacional ou cobertura de turno</div>
+            </div>
+          </button>
+        </div>
+
+        <div style={{marginTop:20,padding:'12px 14px',background:'#F0F4FF',borderRadius:'var(--rs)',border:'1.5px solid #BFDBFE'}}>
+          <div style={{fontFamily:"'Sora',sans-serif",fontSize:11,fontWeight:800,color:'var(--blue)',marginBottom:4}}>🛡️ Acesso de Suporte</div>
+          <div style={{fontSize:11,color:'var(--text2)',lineHeight:1.5}}>
+            Você tem acesso completo ao sistema. Ao preencher checklist, seu nome ficará registrado como responsável pelo turno.
+          </div>
+        </div>
+
+        <button onClick={onLogout} style={{width:'100%',marginTop:14,padding:'10px',background:'transparent',color:'var(--text3)',border:'1.5px solid var(--border)',borderRadius:'var(--rs)',fontFamily:"'Sora',sans-serif",fontSize:12,fontWeight:700}}>
+          Sair do sistema
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [phase,setPhase]=useState('loading');
+  const [user,setUser]=useState(null);
+  const [userKey,setUserKey]=useState(null);
+
+  useEffect(()=>{
+    const s=getSession();
+    if(s){const users=getUsers(),u=users[s.key];if(u&&!u.first){setUser(u);setUserKey(s.key);setPhase('app');}else setPhase('login');}
+    else setPhase('login');
+  },[]);
+
+  function onLogin(u,key){setUser(u);setUserKey(key);setPhase(u.first?'changepwd':'app');if(!u.first)saveSession({key});}
+  function onPwdDone(u){setUser(u);saveSession({key:userKey});setPhase('app');}
+  function onLogout(){clearSession();setUser(null);setUserKey(null);setPhase('login');}
+
+  if(phase==='loading')return <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#1A1A1A'}}><div style={{color:'#fff',fontFamily:"'Sora',sans-serif",fontSize:15}}>🥟 Carregando...</div></div>;
+  if(phase==='login')return <Login onLogin={onLogin}/>;
+  if(phase==='changepwd')return <ChangePwd userKey={userKey} userName={user.name} onDone={onPwdDone}/>;
+  if(phase==='app'){
+    if(user.role==='ceo') return <CEODashboard user={user} onLogout={onLogout}/>;
+    if(user.role==='suporte') return <SuporteHub user={user} onLogout={onLogout}/>;
+    return <ChecklistScreen user={user} onLogout={onLogout}/>;
+  }
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
